@@ -1,0 +1,57 @@
+@import "tailwindcss";
+@layer base {
+  body {
+    @apply bg-[#05070a] text-slate-100 antialiased overflow-x-hidden;
+    /* Deep multi-layered radial background */
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.12) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(147, 51, 234, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
+  }
+}
+
+.pro-card {
+  @apply bg-[#0d1117] border border-white/[0.05] shadow-[0_20px_50px_rgba(0,0,0,0.5)];
+  backdrop-filter: blur(20px);
+}
+
+.neo-shadow {
+  box-shadow: 8px 8px 16px #030406, -8px -8px 16px #070a0e;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-white/40;
+}
+
+.ultra-glass {
+  @apply bg-white/[0.03] backdrop-blur-3xl border border-white/10;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.neo-inset {
+  box-shadow:
+    inset 2px 2px 5px rgba(0, 0, 0, 0.5),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.05);
+}
+
+.text-glow {
+  text-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+}
+
+.cyber-glass {
+  @apply bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)];
+}
+
+.neon-glow-indigo {
+  box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-white/10 rounded-full hover:bg-white/20;
+}
