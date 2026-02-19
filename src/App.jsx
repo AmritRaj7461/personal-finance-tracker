@@ -9,11 +9,12 @@ import SummaryCards from './components/SummaryCards';
 import TransactionForm from './components/TransactionForm';
 import TransactionList from './components/TransactionList';
 import Analytics from './components/Analytics';
+import QuickActions from './components/QuickActions';
+import SavingsGoal from './components/SavingsGoal';
+import BudgetPulseCard from './components/BudgetPulseCard';
 
-// Import your Login and Signup components
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-
 import './App.css';
 
 function App() {
@@ -31,49 +32,87 @@ function App() {
   }, []);
 
   if (!authIsReady) return (
-    <div className="h-screen bg-[#030014] flex items-center justify-center text-indigo-500 font-black">
-      INITIALIZING...
+    <div className="h-screen bg-[#05070a] flex flex-col items-center justify-center space-y-4">
+      <div className="h-12 w-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+      <p className="text-indigo-500 font-black italic tracking-widest uppercase animate-pulse">
+        Initializing Core...
+      </p>
     </div>
   );
 
   return (
-    <div className={`min-h-screen transition-all duration-500 ${theme === 'dark' ? 'bg-[#05070a] text-white' : 'bg-[#f8fafc] text-slate-900'
-      }`}>
+    <div
+      className={`min-h-screen transition-all duration-500 ${theme === 'dark'
+        ? 'bg-[#05070a] text-white'
+        : 'bg-[#f8fafc] text-slate-900'
+        }`}
+    >
       <BrowserRouter>
-        {/* Only show Navbar if user is logged in [cite: 5] */}
-        {user && <Navbar user={user} activeTab={activeTab} setActiveTab={setActiveTab} theme={theme} setTheme={setTheme} />}
+        {user && (
+          <Navbar
+            user={user}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            theme={theme}
+            setTheme={setTheme}
+          />
+        )}
 
         <Routes>
-          {/* Main Dashboard Route [cite: 11] */}
-          <Route path="/" element={
-            user ? (
-              <div className="max-w-7xl mx-auto px-6 py-10">
-                <AnimatePresence mode="wait">
-                  {activeTab === 'dashboard' ? (
-                    <motion.div key="dash" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-                      <SummaryCards theme={theme} />
-                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mt-12 items-start">
-                        <div className="lg:col-span-4 sticky top-32"><TransactionForm theme={theme} /></div>
-                        <div className="lg:col-span-8"><TransactionList theme={theme} /></div>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    <motion.div key="anal" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
-                      <Analytics theme={theme} />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ) : <Navigate to="/login" />
-          } />
+          <Route
+            path="/"
+            element={
+              user ? (
+                /* ✅ MOBILE: full width | DESKTOP: max-width container */
+                <div className="w-full px-4 sm:px-6 lg:max-w-7xl lg:mx-auto lg:px-6 py-6 sm:py-10">
+                  <AnimatePresence mode="wait">
+                    {activeTab === 'dashboard' ? (
+                      <motion.div
+                        key="dash"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                      >
+                        <SummaryCards theme={theme} uid={user.uid} />
 
-          {/* FIX: Defined Login Route */}
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 mt-8 sm:mt-12 items-start">
+
+                          {/* LEFT COLUMN */}
+                          <div className="lg:col-span-4 lg:sticky lg:top-32 z-10 space-y-6">
+                            <QuickActions theme={theme} />
+                            <TransactionForm theme={theme} />
+                          </div>
+
+                          {/* RIGHT COLUMN */}
+                          <div className="lg:col-span-8 space-y-8">
+                            <BudgetPulseCard theme={theme} />
+                            <SavingsGoal theme={theme} uid={user.uid} />
+                            <TransactionList theme={theme} />
+                          </div>
+
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="anal"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                      >
+                        <Analytics theme={theme} />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
           <Route
             path="/login"
             element={!user ? <Login theme={theme} /> : <Navigate to="/" />}
           />
-
-          {/* FIX: Defined Signup Route */}
           <Route
             path="/signup"
             element={!user ? <Signup theme={theme} /> : <Navigate to="/" />}

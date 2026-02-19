@@ -12,40 +12,34 @@ export const useCollection = (collectionName) => {
   const [documents, setDocuments] = useState([]);
 
   useEffect(() => {
-    let unsubData = null;
+    if (!auth.currentUser) {
+      setDocuments([]);
+      return;
+    }
 
-    const unsubAuth = auth.onAuthStateChanged((user) => {
-      if (!user) {
-        setDocuments([]);
-        return;
-      }
+    const ref = collection(db, collectionName);
 
-      const ref = collection(db, collectionName);
-      const q = query(
-        ref,
-        where("uid", "==", user.uid),
-        orderBy("createdAt", "desc"),
-      );
+    const q = query(
+      ref,
+      where("uid", "==", auth.currentUser.uid),
+      orderBy("createdAt", "desc"),
+    );
 
-      unsubData = onSnapshot(
-        q,
-        (snapshot) => {
-          const results = snapshot.docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          }));
-          setDocuments(results);
-        },
-        (error) => {
-          console.error("Firestore read error:", error.message);
-        },
-      );
-    });
+    const unsub = onSnapshot(
+      q,
+      (snapshot) => {
+        const results = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setDocuments(results);
+      },
+      (error) => {
+        console.error("Firestore read error:", error.message);
+      },
+    );
 
-    return () => {
-      if (unsubData) unsubData();
-      unsubAuth();
-    };
+    return () => unsub();
   }, [collectionName]);
 
   return { documents };

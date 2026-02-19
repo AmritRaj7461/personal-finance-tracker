@@ -5,27 +5,32 @@ import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Trash2, Pencil, Check, X, Database, Filter } from 'lucide-react';
 
-const TransactionList = ({ theme }) => { // Theme passed as prop
+// 1. Full list of categories matching TransactionForm.jsx
+const ALL_CATEGORIES = [
+    "All",
+    // Income Categories
+    "Salary", "Freelance", "Investment", "Gift", "Other",
+    // Expense Categories
+    "Food & Dining", "Shopping", "Grocery", "Rent", "Transport", "Bills", "Entertainment"
+];
+
+const TransactionList = ({ theme = 'dark' }) => {
     const { documents } = useCollection("transactions");
     const [query, setQuery] = useState("");
-    const [categoryFilter, setCategoryFilter] = useState("All");
+    const [filterCategory, setFilterCategory] = useState("All");
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({ title: "", amount: 0 });
 
-    const categories = ['All', 'Salary', 'Freelance', 'Investment', 'Food & Dining', 'Shopping', 'Grocery', 'Rent', 'Transport', 'Bills', 'Entertainment'];
-
+    // Filter by both Search Query AND Category
     const filtered = documents?.filter(t => {
-        const searchStr = query.toLowerCase();
-        const matchesSearch = t.title.toLowerCase().includes(searchStr) ||
-            t.category.toLowerCase().includes(searchStr);
-        const matchesCategory = categoryFilter === "All" || t.category === categoryFilter;
+        const matchesSearch = t.title.toLowerCase().includes(query.toLowerCase());
+        const matchesCategory = filterCategory === "All" || t.category === filterCategory;
         return matchesSearch && matchesCategory;
     });
 
     const handleUpdate = async (id) => {
         try {
-            const docRef = doc(db, "transactions", id);
-            await updateDoc(docRef, {
+            await updateDoc(doc(db, "transactions", id), {
                 title: editForm.title,
                 amount: Number(editForm.amount)
             });
@@ -35,75 +40,166 @@ const TransactionList = ({ theme }) => { // Theme passed as prop
         }
     };
 
+    const formatTimestamp = (timestamp) => {
+        if (!timestamp) return "";
+        const date = timestamp.toDate();
+        return date.toLocaleString('en-IN', {
+            day: '2-digit',
+            month: 'short',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+    };
+
     return (
-        <div className={`rounded-[3.5rem] p-10 h-auto min-h-[400px] mb-10 transition-all duration-500 border shadow-2xl ${theme === 'dark' ? 'cyber-glass border-white/10' : 'bg-white border-slate-200 shadow-slate-200/50'
-            }`}>
-            <div className="flex flex-col xl:flex-row justify-between items-center gap-6 mb-12">
+        <div
+            className={`rounded-[2.5rem] sm:rounded-[3.5rem] p-6 sm:p-10 transition-all duration-500 border shadow-2xl relative
+            ${theme === 'dark' ? 'bg-[#0a0c10]/50 border-white/5' : 'bg-white border-slate-200 shadow-slate-200/50'}`}
+        >
+            <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 mb-8 sm:mb-12">
                 <div className="flex items-center gap-3">
-                    <Database className="text-indigo-400" />
-                    <h3 className={`text-2xl font-black tracking-tight italic uppercase ${theme === 'dark' ? 'text-white' : 'text-slate-800'
-                        }`}>Transactions</h3>
+                    <Database className="text-indigo-400" size={20} sm:size={24} />
+                    <h3 className={`text-xl sm:text-2xl font-black tracking-tight italic uppercase ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>
+                        Transactions
+                    </h3>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 w-full xl:w-auto">
-                    <div className="relative group flex-1 sm:w-64">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                {/* Filter & Search Container */}
+                <div className="flex w-full xl:w-auto items-center gap-3">
+                    {/* Search Bar */}
+                    <div className="relative flex-1 xl:w-64">
+                        <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input
-                            placeholder="Scan Ledger..."
                             onChange={e => setQuery(e.target.value)}
-                            className={`w-full h-12 rounded-2xl border pl-12 pr-4 text-xs font-bold outline-none focus:border-indigo-500 transition-all ${theme === 'dark' ? 'bg-black/40 border-white/5 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'
-                                }`}
+                            placeholder="Search..."
+                            className={`w-full h-10 sm:h-12 pl-12 pr-4 rounded-xl sm:rounded-2xl border outline-none font-bold focus:border-indigo-500 transition-all text-xs sm:text-sm
+                            ${theme === 'dark' ? 'bg-[#0a0c10] border-white/5 text-white placeholder-slate-600' : 'bg-slate-50 border-slate-200 text-slate-900'}`}
                         />
                     </div>
-                    <div className="relative flex items-center gap-2">
-                        <Filter className="text-slate-400" size={16} />
+
+                    {/* Category Filter Dropdown */}
+                    <div className="relative flex-shrink-0">
+                        <Filter size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
                         <select
-                            value={categoryFilter}
-                            onChange={(e) => setCategoryFilter(e.target.value)}
-                            className={`h-12 border rounded-2xl px-4 text-xs font-bold outline-none cursor-pointer focus:border-indigo-500 transition-all ${theme === 'dark' ? 'bg-black/40 border-white/5 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
-                                }`}
+                            value={filterCategory}
+                            onChange={(e) => setFilterCategory(e.target.value)}
+                            className={`h-10 sm:h-12 pl-10 pr-8 rounded-xl sm:rounded-2xl border outline-none font-bold focus:border-indigo-500 transition-all text-xs sm:text-sm appearance-none cursor-pointer
+                            ${theme === 'dark' ? 'bg-[#0a0c10] border-white/5 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'}`}
                         >
-                            {categories.map(cat => <option key={cat} value={cat} className={theme === 'dark' ? 'bg-[#030014]' : 'bg-white'}>{cat}</option>)}
+                            {ALL_CATEGORIES.map((c, idx) => (
+                                // 2. Explicitly style the <option> tags to fix the dropdown menu UI
+                                <option
+                                    key={idx}
+                                    value={c}
+                                    className={theme === 'dark' ? 'bg-[#0f172a] text-white font-bold' : 'bg-white text-slate-900 font-bold'}
+                                >
+                                    {c}
+                                </option>
+                            ))}
                         </select>
+                        {/* Custom Dropdown Arrow */}
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
                 <AnimatePresence mode='popLayout'>
                     {filtered?.map((t) => (
                         <motion.div
-                            className={`flex items-center justify-between p-6 rounded-[2rem] border transition-all duration-500 ${theme === 'dark'
-                                ? 'bg-white/[0.02] border-white/5 hover:bg-white/[0.04]'
-                                : 'bg-white border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-200'
-                                }`}
+                            key={t.id}
+                            layout
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className={`flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-300 gap-4 sm:gap-0
+                            ${theme === 'dark' ? 'bg-white/[0.02] border-white/5 hover:bg-white/[0.04]' : 'bg-slate-50/50 border-slate-100 hover:bg-slate-100 shadow-sm'}`}
                         >
-                            <div className="flex items-center gap-6">
-                                <div className={`h-14 w-14 flex items-center justify-center rounded-2xl border font-black text-2xl ${theme === 'dark' ? 'bg-black/60 border-white/10' : 'bg-slate-50 border-slate-200'
-                                    } text-${t.type === 'income' ? 'emerald' : 'rose'}-500`}>
+                            <div className="flex items-center gap-4 sm:gap-6">
+                                <div className={`h-10 w-10 sm:h-14 sm:w-14 flex items-center justify-center rounded-xl sm:rounded-2xl border font-black text-lg sm:text-2xl flex-shrink-0
+                                ${theme === 'dark' ? 'bg-black/60 border-white/10' : 'bg-white border-slate-200 shadow-sm'
+                                    } ${t.type === 'income' ? 'text-emerald-500' : 'text-rose-500'}`}>
                                     {t.title.charAt(0).toUpperCase()}
                                 </div>
-                                <div>
-                                    <p className={`text-lg font-black tracking-tight italic ${theme === 'dark' ? 'text-white' : 'text-slate-800'
-                                        }`}>{t.title}</p>
-                                    <p className="text-[10px] font-black uppercase text-indigo-500/70 tracking-[0.2em]">
-                                        {t.category} • {t.method}
-                                    </p>
+
+                                <div className="min-w-0">
+                                    {editingId === t.id ? (
+                                        <input
+                                            className={`bg-transparent border-b-2 border-indigo-500 outline-none font-black text-sm sm:text-lg italic w-full
+                                            ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}
+                                            value={editForm.title}
+                                            onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                                            autoFocus
+                                        />
+                                    ) : (
+                                        <p className={`text-sm sm:text-lg font-black tracking-tight italic truncate ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>
+                                            {t.title}
+                                        </p>
+                                    )}
+                                    <div className="flex flex-wrap items-center gap-x-2">
+                                        <p className="text-[8px] sm:text-[10px] font-black uppercase text-indigo-500/70 tracking-[0.2em]">
+                                            {t.category} • {t.method}
+                                        </p>
+                                        <p className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>
+                                            {t.createdAt ? `• ${formatTimestamp(t.createdAt)}` : ""}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-6">
-                                <p className={`text-2xl font-black italic tracking-tighter ${t.type === 'income' ? 'text-emerald-500' : 'text-rose-500'
-                                    }`}>
-                                    {t.type === 'income' ? '+' : '-'}₹{t.amount.toLocaleString()}
-                                </p>
-                                {/* Edit/Delete buttons */}
+                            <div className="flex items-center justify-between w-full sm:w-auto gap-4 sm:gap-6 pt-3 sm:pt-0 border-t sm:border-t-0 border-white/5">
+                                <div className="text-right">
+                                    {editingId === t.id ? (
+                                        <input
+                                            type="number"
+                                            className={`bg-transparent border-b-2 border-indigo-500 outline-none font-black text-base sm:text-xl italic w-20 sm:w-24 text-right
+                                            ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}
+                                            value={editForm.amount}
+                                            onChange={(e) => setEditForm({ ...editForm, amount: e.target.value })}
+                                        />
+                                    ) : (
+                                        <p className={`text-lg sm:text-2xl font-black italic tracking-tighter ${t.type === 'income' ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                            {t.type === 'income' ? '+' : '-'}₹{t.amount.toLocaleString()}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className="flex gap-1 sm:gap-2">
+                                    {editingId === t.id ? (
+                                        <>
+                                            <button onClick={() => handleUpdate(t.id)} className="p-1.5 text-emerald-400 hover:scale-110 transition">
+                                                <Check size={18} />
+                                            </button>
+                                            <button onClick={() => setEditingId(null)} className="p-1.5 text-rose-400 hover:scale-110 transition">
+                                                <X size={18} />
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button
+                                                onClick={() => {
+                                                    setEditingId(t.id);
+                                                    setEditForm({ title: t.title, amount: t.amount });
+                                                }}
+                                                className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl transition-all ${theme === 'dark' ? 'text-indigo-400 hover:bg-white/10' : 'text-indigo-600 hover:bg-indigo-50'}`}
+                                            >
+                                                <Pencil size={16} sm:size={18} />
+                                            </button>
+                                            <button
+                                                onClick={() => deleteDoc(doc(db, "transactions", t.id))}
+                                                className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl transition-all ${theme === 'dark' ? 'text-rose-500 hover:bg-rose-500/10' : 'text-rose-600 hover:bg-rose-50'}`}
+                                            >
+                                                <Trash2 size={16} sm:size={18} />
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         </motion.div>
                     ))}
-                    {filtered?.length === 0 && (
-                        <p className={`text-center italic py-10 ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>No matching records detected.</p>
-                    )}
                 </AnimatePresence>
             </div>
         </div>
