@@ -65,16 +65,17 @@ expense on mobile, everything stays fast, responsive, and visually satisfying.
 ## 🛠️ Tech Stack
 
 ### Client-Side
-- React 18 (Vite)
-- Tailwind CSS v3
-- Framer Motion
-- Lucide React
-- React Router v6
+- [React 18](https://react.dev/) (Vite)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS v3](https://tailwindcss.com/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [Lucide React](https://lucide.dev/)
+- [React Router v6](https://reactrouter.com/)
 
 ### Backend / BaaS
-- Firebase Authentication
-- Cloud Firestore
-- Vercel (Deployment)
+- [Firebase Authentication](https://firebase.google.com/products/auth)
+- [Cloud Firestore](https://firebase.google.com/products/firestore)
+- [Vercel](https://vercel.com/) (Deployment)
 
 ---
 
