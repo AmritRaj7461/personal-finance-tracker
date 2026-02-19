@@ -1,25 +1,33 @@
 # 💸 FinancePro - Modern Personal Finance Tracker
 
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](#)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](#)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](#)
+[![Firebase](https://img.shields.io/badge/firebase-ffca28?style=for-the-badge&logo=firebase&logoColor=black)](#)
+
 A sleek, ultra-responsive personal finance application designed to help users track their network balance, monitor transaction flow, and gain deep financial insights. Built with React, Tailwind CSS, Framer Motion, and Firebase.
 
-![FinancePro Preview](https://via.placeholder.com/800x400?text=FinancePro+Dashboard+Preview) ## ✨ Key Features
+![FinancePro Dashboard](./public/dashboard-preview.png)
+*(Save a screenshot of your app as `dashboard-preview.png` in your `public` folder to display it here!)*
+
+## ✨ Key Features
 
 * **Secure Authentication:** Email/Password and Google OAuth login via Firebase Authentication, complete with a secure password recovery protocol.
-* **Real-Time Data:** Instant synchronization of income and expense transactions using Cloud Firestore.
-* **Dynamic Dashboard:** Automatically calculates "Network Balance," "Total Inflow," and "Total Outflow."
-* **Deep Insights:** Advanced analytics and filtering by transaction category (Salary, Food & Dining, Rent, etc.).
+* **Real-Time Data Flow:** Instant synchronization of income and expense transactions using Cloud Firestore listeners. No page refreshes needed.
+* **Dynamic Dashboard:** Automatically calculates "Network Balance," "Total Inflow," and "Total Outflow" based on your personal transaction history.
+* **Deep Insights & Analytics:** Advanced filtering by transaction category (Salary, Food & Dining, Rent, etc.) and visual data representation.
 * **Fluid Animations:** Smooth layout shifts, pop-outs, and page transitions powered by Framer Motion.
-* **Responsive UI:** Mobile-first design that looks perfect on smartphones, tablets, and desktop displays.
+* **Ultra-Responsive UI:** Mobile-first design that looks perfect on smartphones, tablets, and desktop displays without breaking flexbox containers.
 * **Theme Engine:** Seamless toggling between a modern Light Mode and a sleek, cyber-glass Dark Mode.
 
 ## 🛠️ Tech Stack
 
-* **Frontend Framework:** React (Vite)
-* **Styling:** Tailwind CSS
+* **Frontend Framework:** React 18 (Bootstrapped with Vite for extreme performance)
+* **Styling:** Tailwind CSS (Utility-first custom styling)
 * **Icons:** Lucide React
-* **Animations:** Framer Motion
-* **Backend & Database:** Firebase (Authentication, Firestore)
-* **Routing:** React Router DOM
+* **Animations:** Framer Motion (PopLayout and AnimatePresence)
+* **Backend & Database:** Firebase (Authentication, Firestore NoSQL Database)
+* **Routing:** React Router DOM v6
 * **Hosting:** Vercel
 
 ---
@@ -29,7 +37,8 @@ A sleek, ultra-responsive personal finance application designed to help users tr
 ```text
 personal-finance-tracker/
 ├── public/
-│   └── vite.svg
+│   ├── vite.svg
+│   └── dashboard-preview.png   # Repo screenshot
 ├── src/
 │   ├── assets/             # Static assets (images, global CSS)
 │   ├── components/         # Reusable UI components
