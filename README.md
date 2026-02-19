@@ -27,7 +27,6 @@
 - [Tech Stack](#-tech-stack)
 - [Getting Started](#-getting-started)
 - [File Directory Structure](#-file-directory-structure)
-- [Roadmap](#-roadmap)
 - [Contact](#-contact)
 
 ---
@@ -49,17 +48,17 @@ expense on mobile, everything stays fast, responsive, and visually satisfying.
 ### 🛡️ Core System
 - Secure authentication with Email/Password and Google OAuth  
 - Password recovery support  
-- Real-time Firestore synchronization with zero manual refresh
+- Real-time Firestore synchronization with zero manual refresh  
 
 ### 📊 Data & Analytics
 - Live Network Balance, Total Inflow, and Total Outflow  
 - Category-based filtering (Salary, Food, Rent, Bills, etc.)  
-- Instant transaction search and smart filters
+- Instant transaction search and smart filters  
 
 ### 🎨 UI & UX
 - Smooth Framer Motion animations  
 - Fully responsive, mobile-first design  
-- Light mode and immersive Cyber-Glass dark mode
+- Light mode and immersive Cyber-Glass dark mode  
 
 ---
 
@@ -87,24 +86,29 @@ Ensure Node.js and npm are installed.
 ```sh
 npm install npm@latest -g
 
-## 📂 File Directory Structure
+git clone https://github.com/AmritRaj7461/personal-finance-tracker.git
+cd personal-finance-tracker
+npm install
+npm run dev
+```
 
-The following structure represents the core architecture of the  
-FinancePro application.
+---
+
+## 📂 File Directory Structure
 
 ```text
 personal-finance-tracker/
 ├── public/
 │   └── vite.svg
 ├── src/
-│   ├── assets/
-│   ├── components/
+│   ├── assets/              # Global styles & static assets
+│   ├── components/          # Reusable UI components
 │   │   ├── Navbar.jsx
 │   │   ├── SummaryCards.jsx
 │   │   ├── TransactionForm.jsx
 │   │   └── TransactionList.jsx
 │   ├── firebase/
-│   │   └── config.js
+│   │   └── config.js        # Firebase configuration
 │   ├── hooks/
 │   │   ├── useCollection.js
 │   │   ├── useLogin.js
@@ -113,15 +117,17 @@ personal-finance-tracker/
 │   │   ├── Dashboard.jsx
 │   │   ├── Login.jsx
 │   │   └── Signup.jsx
-│   ├── App.jsx
-│   └── main.jsx
-├── .env
+│   ├── App.jsx              # Routing & theme provider
+│   └── main.jsx             # Application entry point
+├── .env                     # Environment variables
 ├── .gitignore
 ├── index.html
 ├── package.json
 ├── tailwind.config.js
 └── vite.config.js
+```
 
+---
 
 ## 📬 Contact
 
