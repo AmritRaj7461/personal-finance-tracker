@@ -66,7 +66,10 @@ const BudgetPulseCard = ({ theme }) => {
                                     <AlertTriangle size={17} className="text-yellow-500" /> Critical Threshold Violated
                                 </motion.span>
                             )}
-                            <span className="text-[10px] font-black uppercase text-slate-500">Daily Online Limit</span>
+                            <span className={`text-[10px] font-black uppercase ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'
+                                }`}>
+                                Daily Online Limit
+                            </span>
                         </div>
                         {isEditing ? (
                             <input
@@ -89,8 +92,10 @@ const BudgetPulseCard = ({ theme }) => {
                 {/* MONTHLY LIMIT SECTION */}
                 <div className="space-y-4">
                     <div className="flex justify-between items-end">
-                        <span className="text-[10px] font-black uppercase text-slate-500">Global Monthly Pulse</span>
-                        {isEditing ? (
+                        <span className={`text-[10px] font-black uppercase ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'
+                            }`}>
+                            Global Monthly Pulse
+                        </span>                        {isEditing ? (
                             <input
                                 type="number"
                                 className="bg-transparent border-b border-purple-500 text-right font-black text-purple-400 outline-none w-24"
@@ -98,7 +103,10 @@ const BudgetPulseCard = ({ theme }) => {
                                 onChange={(e) => setMonthlyLimit(Number(e.target.value))}
                             />
                         ) : (
-                            <span className={`text-[10px] font-black ${monthlyProgress > 90 ? 'text-rose-500' : 'text-slate-500'}`}>
+                            <span className={`text-[10px] font-black ${monthlyProgress > 90
+                                ? 'text-rose-500'
+                                : (theme === 'dark' ? 'text-slate-300' : 'text-purple-600')
+                                }`}>
                                 {monthlyProgress.toFixed(1)}% Velocity
                             </span>
                         )}

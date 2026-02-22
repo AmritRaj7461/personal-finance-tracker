@@ -89,7 +89,8 @@ const MiniStat = ({ label, val, color, theme, icon }) => {
                 }`}
         >
             <div>
-                <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-1 sm:mb-2">
+                <p className={`text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] mb-1 sm:mb-2 ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
+                    }`}>
                     {label}
                 </p>
                 <h3

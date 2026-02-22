@@ -186,7 +186,7 @@ const TransactionForm = ({ theme = 'dark' }) => {
 
 const Input = ({ label, value, setValue, type = 'text', theme, placeholder }) => (
     <div className="space-y-1.5 sm:space-y-2">
-        <label className={`text-[9px] sm:text-[10px] uppercase tracking-widest font-black ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>
+        <label className={`text-[9px] sm:text-[10px] uppercase tracking-widest font-black ${theme === 'dark' ? 'text-slate-200' : 'text-slate-600'}`}>
             {label}
         </label>
         <input
@@ -203,7 +203,7 @@ const Input = ({ label, value, setValue, type = 'text', theme, placeholder }) =>
 
 const Select = ({ label, value, setValue, children, theme }) => (
     <div className="space-y-1.5 sm:space-y-2">
-        <label className={`text-[9px] sm:text-[10px] uppercase tracking-widest font-black ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>
+        <label className={`text-[9px] sm:text-[10px] uppercase tracking-widest font-black ${theme === 'dark' ? 'text-slate-200' : 'text-slate-600'}`}>
             {label}
         </label>
         <select

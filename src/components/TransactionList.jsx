@@ -143,7 +143,7 @@ const TransactionList = ({ theme = 'dark' }) => {
                                         <p className="text-[8px] sm:text-[10px] font-black uppercase text-indigo-500/70 tracking-[0.2em]">
                                             {t.category} • {t.method}
                                         </p>
-                                        <p className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>
+                                        <p className={`text-[8px] sm:text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>
                                             {t.createdAt ? `• ${formatTimestamp(t.createdAt)}` : ""}
                                         </p>
                                     </div>

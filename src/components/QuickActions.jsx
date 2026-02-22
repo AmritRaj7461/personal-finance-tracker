@@ -40,7 +40,7 @@ const QuickActions = ({ theme }) => {
             <div className="flex items-center gap-2 px-1 sm:px-2">
                 <Plus size={14} className="text-indigo-500" />
                 <span
-                    className={`text-[10px] font-black uppercase tracking-[0.3em] ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                    className={`text-[10px] font-black uppercase tracking-[0.3em] ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
                         }`}
                 >
                     Quick Auth Bar
@@ -79,7 +79,7 @@ const QuickActions = ({ theme }) => {
                                 {item.label}
                             </p>
                             <p
-                                className={`text-xs font-bold ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'
+                                className={`text-xs font-bold ${theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
                                     }`}
                             >
                                 ₹{item.amt}

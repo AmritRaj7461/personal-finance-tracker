@@ -124,7 +124,7 @@ const SavingsGoal = ({ theme, uid }) => {
                     ) : (
                         <>
                             <p className="text-base sm:text-lg font-black italic tracking-tighter truncate">{goalName}</p>
-                            <p className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">₹{balance.toLocaleString()} / ₹{goalAmount.toLocaleString()}</p>
+                            <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mt-1">₹{balance.toLocaleString()} / ₹{goalAmount.toLocaleString()}</p>
                         </>
                     )}
                 </div>
